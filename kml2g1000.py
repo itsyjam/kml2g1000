@@ -25,7 +25,7 @@ def export(kml):
     base = os.path.splitext(kml)[0]
     output = base + ".csv"
     if os.path.exists(output):
-        print(f"file: {kml} has already been exported to {output}")
+        print(f"File: {kml} has already been exported to {output}. Skipping.")
         return
 
     print("Exporting " + output)
@@ -78,14 +78,17 @@ def export(kml):
         f.writelines("\n".join(csv))
 
 
-# Convert all files in source directory.
-
+# Convert all files passed as arguments
 if len(sys.argv) < 2:
-    print("usage:")
+    print("Usage: kml2g1000.py <file1.kml> <file2.kml> ... <fileN.kml>")
     sys.exit(-1)
 
 for fileName in sys.argv[1:]:
     if os.path.exists(fileName):
-        export(fileName)
+        try:
+            export(fileName)
+        except Exception as e:
+            print(f"Exception occured converting {fileName}: {e}")
+
     else:
-        print(f"file {fileName} does not exist.")
+        print(f"File {fileName} does not exist. Skipping.")
